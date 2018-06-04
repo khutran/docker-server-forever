@@ -44,7 +44,8 @@ RUN yum -y install git && \
     yum clean all
 #install pm2
 RUN npm install pm2@latest -g
-ADD ../../run/mysql* /usr/sbin/
+ADD run/mysql /usr/sbin/
+ADD run/mysqldump /usr/sbin/
 
 EXPOSE 80
 
