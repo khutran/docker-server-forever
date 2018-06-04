@@ -44,6 +44,11 @@ RUN yum -y install git && \
     yum clean all
 #install pm2
 RUN npm install pm2@latest -g
+
+#config nginx
+RUN rm -rf /etc/nginx/nginx.conf 
+ADD nginx.conf /etc/nginx/
+
 ADD run/mysql /usr/sbin/
 ADD run/mysqldump /usr/sbin/
 
