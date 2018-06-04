@@ -42,7 +42,9 @@ RUN yum -y install git && \
     yum -y install libgcrypt-devel && \
     ln -s /usr/lib64/libcurl.so.4 /usr/lib64/libcurl-gnutls.so.4 && \
     yum clean all
-    
+#install pm2
+RUN npm install pm2@latest -g
+
 EXPOSE 80
 
 # Simple startup script to avoid some issues observed with container restart
