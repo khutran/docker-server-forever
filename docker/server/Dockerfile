@@ -37,11 +37,17 @@ RUN yum -y install git && \
     curl --silent --location https://rpm.nodesource.com/setup_8.x | bash - && \
     curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
     yum -y install nodejs && \
+    npm install -g n && \
+    n 9.9.0 && \
     yum -y install yarn && \
     yum -y install gcc-c++ make && \
     yum -y install libgcrypt-devel && \
     ln -s /usr/lib64/libcurl.so.4 /usr/lib64/libcurl-gnutls.so.4 && \
     yum clean all
+    
+#install angularcli
+RUN npm install -g @angular/cli
+
 #install pm2
 RUN npm install pm2@latest -g
 
