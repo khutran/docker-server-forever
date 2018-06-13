@@ -65,8 +65,8 @@ RUN yum -y install git && \
 #install angularcli
 RUN npm install -g @angular/cli
 
-#install pm2
-RUN npm install pm2@latest -g
+#install forever
+RUN npm install forever -g
 
 #config nginx
 RUN rm -rf /etc/nginx/nginx.conf 
