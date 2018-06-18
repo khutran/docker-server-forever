@@ -11,6 +11,7 @@ ENV nginxversion="1.12.2-1" \
     elversion="7_4" \
     port_apache=6669
 
+#install nginx
 RUN yum install -y wget openssl sed &&\
     yum -y autoremove &&\
     yum clean all &&\
@@ -20,6 +21,22 @@ RUN yum install -y wget openssl sed &&\
     daemon off;\
     ' /etc/nginx/nginx.conf && \
     rm -rf nginx*
+ 
+# install httpd
+RUN yum -y --setopt=tsflags=nodocs update && \
+    yum -y install epel-release && \
+    yum -y --setopt=tsflags=nodocs install httpd && \
+    yum clean all && \ 
+    yum -y install wget && \
+    yum -y install yum-changelog && \
+    yum changelog httpd && \
+    cd /etc/yum.repos.d && \
+    wget https://repo.codeit.guru/codeit.el`rpm -q --qf "%{VERSION}" $(rpm -q --whatprovides redhat-release)`.repo && \
+    yum -y install httpd && \
+    mkdir /etc/httpd/conf.d/web && \
+    sed -i s/80/${port_apache}/g /etc/httpd/conf/httpd.conf && \
+    sed -i 's/DirectoryIndex index.html/DirectoryIndex index.php index.html/g' /etc/httpd/conf/httpd.conf && \
+    echo "IncludeOptional conf.d/web/*.conf" >> /etc/httpd/conf/httpd.conf
     
 # install supervisord
 RUN yum -y install python-setuptools && \
@@ -37,13 +54,19 @@ RUN yum -y install git && \
     curl --silent --location https://rpm.nodesource.com/setup_8.x | bash - && \
     curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
     yum -y install nodejs && \
+    npm install -g n && \
+    n 9.9.0 && \
     yum -y install yarn && \
     yum -y install gcc-c++ make && \
     yum -y install libgcrypt-devel && \
     ln -s /usr/lib64/libcurl.so.4 /usr/lib64/libcurl-gnutls.so.4 && \
     yum clean all
-#install pm2
-RUN npm install pm2@latest -g
+    
+#install angularcli
+RUN npm install -g @angular/cli
+
+#install forever
+RUN npm install forever -g
 
 #config nginx
 RUN rm -rf /etc/nginx/nginx.conf 
